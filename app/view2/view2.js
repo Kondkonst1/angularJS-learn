@@ -9,10 +9,25 @@ angular.module('myApp.view2', ['ngRoute'])
   });
 }])
 
-.controller('View2Ctrl', ['$scope', function($scope) {
+.controller('View2Ctrl', ['$scope', '$http', function($scope, $http) {
+
+  let BASE_URL = "https://openlibrary.org/search.json?q=";
+
   $scope.myItems = ['1','2','3','4','5'];
-  $scope.showMess = function()  {
-    console.log("!!!!!");
+  $scope.showMess = function(q)  {
+      BASE_URL = BASE_URL+q+'&page=1';
+
+      console.log(BASE_URL);
+ $http({method:'GET', url:BASE_URL}).then(
+
+     function success(responce) {
+       $scope.result = responce.data.start;
+         console.log( $scope.result)
+     }
+ )
+
+
+
   };
 
 
