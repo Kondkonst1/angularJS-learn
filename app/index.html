@@ -12,78 +12,76 @@
   <link rel="stylesheet" href="lib/html5-boilerplate/dist/css/main.css">
   <link rel="stylesheet" href="css/trello.css">
 
-  <script src="lib/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
-</head>
-
-<body ng-cloak>
-  <header>
-    <div class="row">
-      <h1 class="app-name left">Trello konst</h1>
-    </div>
-  </header>
-
-  <section id="lists-container" class="lists-container" ng-controller="listsCtrl as listsCtrl">
-    <div class="row">
-      <section class="list list-inline" ng-repeat="list in listsCtrl.lists" ng-controller="listCtrl as listCtrl">
-        <h1>{{list.listName}}</h1>
-        <div class="card" ng-repeat="card in listCtrl.getCards(list)" ng-controller="cardCtrl as cardCtrl">
-      
-          <div ng-if = "!cardCtrl.isEditing">
-            {{card.description}}
-            <div ng-click="cardCtrl.editCard(card)" class="edit-small edit-card hand"></div>
-            <div ng-click="cardCtrl.deleteCard(card)" class="remove-small remove-card hand"></div>
-          </div>
-
-          <div ng-if = "cardCtrl.isEditing">
-            <form ng-submit="cardCtrl.updateCard(card)">
-              <input type="text" ng-model="cardCtrl.editingCard.description">
-            </form>
-          </div>
-
-
-        </div>
-        <a ng-click="listCtrl.removelist()" class="hand">
-          <div class="remove remove-list"></div>
-        </a> 
-        
-        <section class="new-card">
-        <form ng-submit="listCtrl.addCard(list)">
-          <input type="text" ng-model="listCtrl.description" class="card-input">
-        </form>
-      </section>
-      </section>
- 
-
-      <section class="list new-list list-inline">
-        <form ng-submit="listsCtrl.addList()">
-          <input type="text" ng-model="listsCtrl.listName" placeholder="Введеите название списка...">
-        </form>
-
-      </section>
-
-    </div>
-
-
-
-  </section>
-
-
-
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.js"></script>
+  <!-- <script src="lib/angular/angular.js"></script>
+  <script src="lib/angular-route/angular-route.js"></script>
+  <script src="core/version/version.js"></script>
+  <script src="core/version/version-directive.js"></script>
+  <script src="core/version/interpolate-filter.js"></script>
+  <script src="lib/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script> -->
+  
   <script src="js/app.js"></script>
   <script src="js/factories/listFactory.js"></script>
   <script src="js/factories/cardFactory.js"></script>
   <script src="js/controllers/listsCtrl.js"></script>
   <script src="js/controllers/listCtrl.js"></script>
   <script src="js/controllers/cardCtrl.js"></script>
+  <script src="js/directives/closeEditing.js"></script>
+  <!-- <script src="js/directives/dragDirective.js"></script> -->
+</head>
+<body ng-cloak>
+  <header>
+    <div class="row">
+      <h1 class="app-name left">Trello konst</h1>
+    </div>
+  </header>
+  <section id="lists-container" class="lists-container" ng-controller="listsCtrl as listsCtrl">
+    <div class="row">
+      <section class="list list-inline" ng-repeat="list in listsCtrl.lists" ng-controller="listCtrl as listCtrl">
+        <h1>{{list.listName}}</h1>
+        <div class="card" ng-repeat="card in listCtrl.getCards(list)" ng-controller="cardCtrl as cardCtrl">
+          <div ng-if="!cardCtrl.isEditing">
+            {{card.description}}
+            <div ng-click="cardCtrl.editCard(card)" class="edit-small edit-card hand"></div>
+            <div ng-click="cardCtrl.deleteCard(card)" class="remove-small remove-card hand"></div>
+          </div>
+          <div ng-if="cardCtrl.isEditing">
+            <form ng-submit="cardCtrl.updateCard()">
+              <input
+              type="text" 
+              ng-model="cardCtrl.editingCard.description"
+              close-editing
+              is-editing = "cardCtrl.isEditing">
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.js"></script>
-  <script src="lib/angular/angular.js"></script>
-  <script src="lib/angular-route/angular-route.js"></script>
-  <script src="core/version/version.js"></script>
-  <script src="core/version/version-directive.js"></script>
-  <script src="core/version/interpolate-filter.js"></script>
+              <select 
+              class="select-list" 
+              ng-model="cardCtrl.editingCard.list_id"
+              ng-change="cardCtrl.updateCard()"
+              ng-options="list.id as list.listName for list in listsCtrl.lists">
+            </select>
+            </form>
+          </div>
+        </div>
+        <a ng-click="listCtrl.removelist(list)" class="hand">
+          <div class="remove remove-list"></div>
+        </a>
+        <section class="new-card">
+          <form ng-submit="listCtrl.addCard(list)">
+            <input type="text" ng-model="listCtrl.description" class="card-input"  placeholder="Введите название задачи...">
+          </form>
+        </section>
+      </section>
+      <section class="list new-list list-inline">
+        <form ng-submit="listsCtrl.addList()">
+          <input type="text" ng-model="listsCtrl.listName" placeholder="Введеите название списка...">
+        </form>
+      </section>
+    </div>
+  </section>
+
+
+
 </body>
 
 </html>
