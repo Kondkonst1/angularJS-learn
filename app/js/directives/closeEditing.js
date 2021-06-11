@@ -1,8 +1,7 @@
 angular.module("app").directive("closeEditing", function () {
 
-    console.log("close");
   let KEYS = {
-    ESCAPE: 27,
+    ESCAPE: 'Escape',
   };
   return {
     scope: {
@@ -10,8 +9,9 @@ angular.module("app").directive("closeEditing", function () {
     },
 
     link: function (scope, element, attrs) {
-      element.on("keyUp", function (e) {
-          console.log("ddd");
+     
+      element.on("keyup", function (e) {
+     console.log(e.key);
         if (_.isEqual(e.key, KEYS.ESCAPE)) {
           scope.isEditing = false;
           scope.$apply();
